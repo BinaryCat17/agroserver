@@ -1,0 +1,8 @@
+FROM python:3.9
+
+WORKDIR /app/workspace
+
+COPY ../back/requirements.txt /app/workspace/requirements.txt
+RUN python3 -m pip install --no-cache-dir --upgrade -r /app/workspace/requirements.txt
+
+CMD uvicorn app.server:app --port 8081 --host 0.0.0.0 --reload

@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+  admin:
+    image: agrojournal-admin:$TAG
+    build:
+      context: ../
+      dockerfile: admin/Dockerfile.dev
+    volumes:
+      - type: bind
+        source: ../admin/
+        target: /app/workspace/
+      - resources:/app/workspace/resources
+      - node_modules_admin:/app/workspace/admin/node_modules
+    environment:
+      - HOST=0.0.0.0
+      - PORT=5173
+    ports:
+      - "$ADMIN_PORT:5173"
+    env_file: ../admin/.env
+    depends_on:
+      - back
+  
+  back:
+    image: agrojournal-back:$TAG
+    build:
+      context: ../
+      dockerfile: back/Dockerfile.dev
+    volumes:
+      - type: bind
+        source: ../back/
+        target: /app/workspace/
+      - resources:/app/workspace/resources
+    ports:
+      - "$BACK_PORT:8081"
+    env_file: ../back/.env
+    depends_on:
+      - db
+
+  db:
+    image: postgres:13.3
+    ports:
+      - "$POSTGRES_PORT:5432"
+    env_file: ../db/.env
+
+volumes:
+  resources:
+  node_modules_admin:

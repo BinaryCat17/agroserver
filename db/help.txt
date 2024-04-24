@@ -1,0 +1,3 @@
+export PGPASSWORD='dbpassword'; psql -h localhost -d dbname -U dbuser -f db/structure.sql
+
+https://earthexplorer.usgs.gov/

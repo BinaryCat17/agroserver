@@ -1,0 +1,9 @@
+FROM node:20
+
+WORKDIR /app/workspace
+
+COPY ../admin/package.json /app/workspace/package.json
+
+RUN npm install
+
+CMD npm run dev
