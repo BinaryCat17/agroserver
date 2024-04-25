@@ -1,6 +1,12 @@
+import io
+import imageio
+from imageio import v3 as iio
 import os
+import cv2
+import base64
+import numpy as np
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi.responses import StreamingResponse, Response
 
 SATELLITE_PATH = os.environ['SATELLITE_PATH']
 print(SATELLITE_PATH)
@@ -27,6 +33,16 @@ async def root(entity_id: str):
 async def root(entity_id: str):
     return {"message": f"Delete {entity_id}"}
 
-@app.get("/tiles/satellite/{z}/{x}/{y}.png")
+@app.get("/tiles/satellite/{z}/{x}/{y}.png", response_class=Response)
 async def root(z, x, y):
-    return FileResponse(f'{SATELLITE_PATH}/{z}/{x}/{y}.png')
+    img = cv2.imread(f'{SATELLITE_PATH}/{z}/{x}/{y}.png')
+    if img is None:
+        img = np.zeros((256,256,3), np.uint8)
+        img.fill(255) 
+
+    with io.BytesIO() as buf:
+        iio.imwrite(buf, img, plugin="pillow", format="JPEG")
+        im_bytes = buf.getvalue()
+        
+    headers = {'Content-Disposition': 'inline; filename="test.jpeg"'}
+    return Response(im_bytes, headers=headers, media_type='image/jpeg')

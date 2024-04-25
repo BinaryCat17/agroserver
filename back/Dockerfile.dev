@@ -2,6 +2,7 @@ FROM python:3.9
 
 WORKDIR /app/workspace
 
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 COPY ../back/requirements.txt /app/workspace/requirements.txt
 RUN python3 -m pip install --no-cache-dir --upgrade -r /app/workspace/requirements.txt
 
