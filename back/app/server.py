@@ -1,5 +1,9 @@
+import os
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
+
+SATELLITE_PATH = os.environ['SATELLITE_PATH']
+print(SATELLITE_PATH)
 
 app = FastAPI()
 
@@ -25,4 +29,4 @@ async def root(entity_id: str):
 
 @app.get("/tiles/satellite/{z}/{x}/{y}.png")
 async def root(z, x, y):
-    return FileResponse('data/satellite/{z}/{x}/{y}.png')
+    return FileResponse(f'{SATELLITE_PATH}/{z}/{x}/{y}.png')

@@ -29,6 +29,9 @@ services:
       - type: bind
         source: ../back/
         target: /app/workspace/
+      - type: bind
+        source: $DATASETS_PATH
+        target: /app/datasets/
       - resources:/app/workspace/resources
     ports:
       - "$BACK_PORT:8081"
