@@ -35,7 +35,7 @@ async def root(entity_id: str):
 
 @app.get("/tiles/satellite/{z}/{x}/{y}.png", response_class=Response)
 async def root(z, x, y):
-    img = cv2.imread(f'{SATELLITE_PATH}/{z}/{y}/{x}.png')
+    img = cv2.imread(f'{SATELLITE_PATH}/{z}/{x}/{y}.png')
     if img is None:
         img = np.zeros((256,256,3), np.uint8)
         img.fill(255) 
