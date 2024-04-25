@@ -6,10 +6,9 @@ import cv2
 import base64
 import numpy as np
 from fastapi import FastAPI
-from fastapi.responses import StreamingResponse, Response
+from fastapi.responses import Response
 
-SATELLITE_PATH = os.environ['SATELLITE_PATH']
-print(SATELLITE_PATH)
+DATA_PATH = os.environ['DATA_PATH']
 
 app = FastAPI()
 
@@ -33,9 +32,9 @@ async def root(entity_id: str):
 async def root(entity_id: str):
     return {"message": f"Delete {entity_id}"}
 
-@app.get("/tiles/satellite/{z}/{x}/{y}.png", response_class=Response)
-async def root(z, x, y):
-    img = cv2.imread(f'{SATELLITE_PATH}/{z}/{x}/{y}.png')
+@app.get("/tiles/{layer}/{z}/{x}/{y}.png", response_class=Response)
+async def root(layer, z, x, y):
+    img = cv2.imread(f'{DATA_PATH}/{layer}/{z}/{x}/{y}.png')
     if img is None:
         img = np.zeros((256,256,3), np.uint8)
         img.fill(255) 
